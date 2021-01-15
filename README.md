@@ -1,15 +1,13 @@
-# Orinoco #
+# Orinoco Projet Eugène Carmona  #
 
-This is the back end server for Project 5 of the Junior Web Developer path.
+Voici le front et le back end du Projet Open Classroom 5 
 
-### Prerequisites ###
+### Prérequis ###
 
-You will need to have Node and `npm` installed locally on your machine.
+Vous aurez besoin de faire l'installation du node serveur sur votre machine 
 
 ### Installation ###
 
-Clone this repo. From within the project folder, run `npm install`. You 
-can then run the server with `node server`. 
-The server should run on `localhost` with default port `3000`. If the
-server runs on another port for any reason, this is printed to the
-console when the server starts, e.g. `Listening on port 3001`.
+- Cloner le repo entier puis depuis la localisation du fichier sur le terminal lancez `npm install`. 
+- Lancez ensuite le serveur avec la commande `node server`. 
+- Vous pouvez ensuite ouvrir l'index.html dans le navigateur.
