@@ -8,6 +8,6 @@ Vous aurez besoin de faire l'installation du node serveur sur votre machine
 
 ### Installation ###
 
-- Cloner le repo entier puis depuis la localisation du fichier sur le terminal lancez `npm install`. 
+- Clonez le repo entier puis depuis la localisation du fichier sur le terminal lancez `npm install`. 
 - Lancez ensuite le serveur avec la commande `node server`. 
 - Vous pouvez ensuite ouvrir l'index.html dans le navigateur.
