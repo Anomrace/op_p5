@@ -23,11 +23,6 @@ const getobj = async function () {
   desc.textContent = data.description
   var url = new URL(window.location.href)
   let teddyId = url.searchParams.get('id')
-  /* ancienne notation bouton
-  let a = document.createElement('a')
-  a.textContent = 'ajouter au panier'
-  a.href = `produit.html?id=${teddyId}`
-  a.setAttribute('class', 'addToCart')*/
   let AjouterAuPanier = document.createElement('button')
   AjouterAuPanier.setAttribute('class', 'addToCart')
   AjouterAuPanier.textContent = 'Ajouter au panier'

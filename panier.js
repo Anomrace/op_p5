@@ -71,12 +71,12 @@ function checkLastName() {
     let letters = /^[A-Za-z-\s]+$/
 
     if (lastName.value.trim() == "") {
-        let errorLastName = document.getElementById('errorFirstName')
+        let errorLastName = document.getElementById('errorLastName')
         errorLastName.innerHTML = "le champs est requis"
         errorLastName.style.color = 'red'
 
     } else if (letters.test(lastName.value) == false) {
-        let errorLastName = document.getElementById('errorFirstName')
+        let errorLastName = document.getElementById('errorLastName')
         errorLastName.innerHTML = "le champs est doit comporter des lettres des tirets uniquement"
         errorLastName.style.color = 'red'
 
@@ -176,7 +176,7 @@ form.addEventListener('submit', function (e) {
         })
         .then(function (response) {
             if (response.status != 201) {
-                window.alert('somethin went wrong')
+                window.alert('something went wrong')
             } else {
                 return response.json()
             }
@@ -184,8 +184,6 @@ form.addEventListener('submit', function (e) {
         .then(function (data) {
 
             window.open(`confirmation.html?orderId=${data.orderId}&firstName=${firstName}&lastName=${lastName}&price=${sommePrix}`)
-
-
 
         })
 
