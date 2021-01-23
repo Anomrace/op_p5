@@ -1,3 +1,4 @@
+// on montre les données du panier avec un tableau 
 const panierTable = document.querySelector('.panier')
 let tableData = '';
 tableData += '<tr><th>Nom</th><th>Couleur</th><th>Nombre de produit</th><th>Prix en euros</th><th></th></tr>';
@@ -5,7 +6,7 @@ JSON.parse(localStorage.getItem('items')).map(data => {
     tableData += '<tr><th>' + data.name + '</th><th>' + data.color + '</th><th>' + data.no + '</th><th id="prix">' + data.price + '</th><th><a href="#" onclick=Delete(this);>Delete</a></th></tr>';
 
 })
-//effacer les produits
+//effacer les produits dont on ne veut pas
 function Delete(e) {
     let items = []
     JSON.parse(localStorage.getItem('items')).map(data => {
@@ -18,35 +19,33 @@ function Delete(e) {
     localStorage.setItem('items', JSON.stringify(items))
 
 }
-
 panierTable.innerHTML = tableData
 
+// on effectue la somme du prix et on affiche
 const prix = document.querySelectorAll('th#prix')
 let sommePrix = 0
 for (let i = 0; i < prix.length; i++) {
     sommePrix += parseInt(prix[i].innerHTML)
-
-
 }
+let prixTotal = document.querySelector('.prixTotal')
+prixTotal.innerHTML = sommePrix
+// même chose que précédemment dans index et produit
 const numberItems = document.querySelector('.nb')
-
 let no = 0
 JSON.parse(localStorage.getItem('items')).map(data => {
     no = no + data.no
 })
-
 numberItems.innerHTML = no
-let prixTotal = document.querySelector('.prixTotal')
-prixTotal.innerHTML = sommePrix
 
+
+// on crée le tableau de produit dont on aura besoin et on y met les data id qui vont être renvoyé au serveur
 let products = []
-
 JSON.parse(localStorage.getItem('items')).map(data => {
     products.push(data.id)
 })
 
+// on récupère les données du formulaire et les check 
 const form = document.getElementById('contact')
-
 
 function checkFirstName() {
     let letters = /^[A-Za-z-\s]+$/
@@ -158,6 +157,7 @@ form.addEventListener('submit', function (e) {
     checkCity(city)
     checkEmail(email)
 
+    // on envoit les données avec une post request
     fetch("http://localhost:3000/api/teddies/order", {
             method: 'POST',
             headers: {
@@ -176,15 +176,17 @@ form.addEventListener('submit', function (e) {
         })
         .then(function (response) {
             if (response.status != 201) {
-                window.alert('something went wrong')
+                window.alert('Veuillez vérifier les données que vous avez rentré')
             } else {
                 return response.json()
             }
         })
         .then(function (data) {
-
+            // quand la réponse est récupérée on supprime le panier et 
+            // on ouvre la page confirmation.html en transmettant les données pour un url search param
+           localStorage.clear()
             window.open(`confirmation.html?orderId=${data.orderId}&firstName=${firstName}&lastName=${lastName}&price=${sommePrix}`)
-
+            window.location.reload()
         })
 
 
