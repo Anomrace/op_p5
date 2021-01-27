@@ -10,19 +10,14 @@ if (JSON.parse(localStorage.getItem('items')) !== null){
 })}
 //effacer les produits dont on ne veut pas
 function Delete(e) {
-    let items = []
-    JSON.parse(localStorage.getItem('items')).map(data => {
-        if (data.name != e.parentElement.parentElement.children[0].textContent || data.color != e.parentElement.parentElement.children[1].textContent) {
-            items.push(data)
-        }
-
-    })
+    const items = JSON.parse(localStorage.getItem('items'))
+    const filtered = items.filter (item => item.color !== e.parentElement.parentElement.children[1].textContent)
+    localStorage.setItem('items', JSON.stringify(filtered))
     window.location.reload()
-    localStorage.setItem('items', JSON.stringify(items))
-
+    
 }
 panierTable.innerHTML = tableData
-
+console.log(localStorage.length)
 // on effectue la somme du prix et on affiche
 const prix = document.querySelectorAll('th#prix')
 let sommePrix = 0
@@ -167,7 +162,7 @@ function checkEmail() {
             checkEmail(email)
     
             // on envoit les données avec une post request
-            if(JSON.parse(localStorage.getItem('items')) !== null){
+            if(JSON.parse(localStorage.getItem('items')) !== null && localStorage.length !== 1){
                 fetch("http://localhost:3000/api/teddies/order", {
                     method: 'POST',
                     headers: {
@@ -202,7 +197,9 @@ function checkEmail() {
                     localStorage.clear()
                 })
             }else{
+
                 window.alert('Attention votre panier est vide!')
+                localStorage.clear()
             }
             
     
