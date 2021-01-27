@@ -25,7 +25,7 @@ const getobj = async function () {
     priceText.textContent = 'Prix'
 
     let priceNumber = document.createElement('p')
-    priceNumber.textContent = `${data[i].price}€`
+    priceNumber.textContent = `${data[i].price/100}€`
 
     let EnSavoirPlus = document.createElement('a')
     EnSavoirPlus.textContent = 'description'
@@ -36,23 +36,29 @@ const getobj = async function () {
     card.appendChild(img)
 
     card.appendChild(h2)
-    
+
     card.appendChild(priceText)
-    
+
     card.appendChild(priceNumber)
-    
+
     card.appendChild(EnSavoirPlus)
+
   }
 
-  // modifie le numéro du panier
-  const numberItems = document.querySelector('.nb')
 
-  let no = 0
-  JSON.parse(localStorage.getItem('items')).map(data => {
-    no = no + data.no
-  })
 
-  numberItems.innerHTML = no
+
+
 }
 
 getobj()
+// modifie le numéro du panier
+const numberItems = document.querySelector('.nb')
+
+let no = 0
+if (JSON.parse(localStorage.getItem('items')) !== null) {
+  JSON.parse(localStorage.getItem('items')).map(data => {
+    no = no + data.no
+    numberItems.innerHTML = no
+  })
+}

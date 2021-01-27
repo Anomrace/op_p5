@@ -23,8 +23,7 @@ const getobj = async function () {
   img.src = data.imageUrl
 
   let p = document.createElement('p')
-  p.textContent = data.price
-
+  p.textContent = data.price/100 
   let desc = document.createElement('p')
   desc.textContent = data.description
   // ajout de l'affichage d'un bouton pour ajouer au panier 
@@ -100,14 +99,20 @@ const getobj = async function () {
       }
     })
   } 
-  //  même chose que dans l'index
-  const numberItems = document.querySelector('.nb')
-
-  let no = 0
-  JSON.parse(localStorage.getItem('items')).map(data => {
-    no = no + data.no
-  })
-  numberItems.innerHTML = no
+  
+  
 
 }
 getobj()
+
+//  même chose que dans l'index
+
+const numberItems = document.querySelector('.nb')
+
+let no = 0
+if(JSON.parse(localStorage.getItem('items'))!== null){
+JSON.parse(localStorage.getItem('items')).map(data => {
+  no = no + data.no
+  numberItems.innerHTML = no
+})
+}
