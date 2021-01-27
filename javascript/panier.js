@@ -17,7 +17,7 @@ function Delete(e) {
     
 }
 panierTable.innerHTML = tableData
-console.log(localStorage.length)
+
 // on effectue la somme du prix et on affiche
 const prix = document.querySelectorAll('th#prix')
 let sommePrix = 0
