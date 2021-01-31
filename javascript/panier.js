@@ -2,19 +2,23 @@
 const panierTable = document.querySelector('.panier')
 let tableData = ''
 tableData += '<tr><th>Nom</th><th>Couleur</th><th>Nombre de produit</th><th>Prix en euros</th><th></th></tr>'
-if (JSON.parse(localStorage.getItem('items')) !== null){
+if (JSON.parse(localStorage.getItem('items')) !== null) {
     JSON.parse(localStorage.getItem('items')).map(data => {
-    
+
         tableData += '<tr><th>' + data.name + '</th><th>' + data.color + '</th><th>' + data.no + '</th><th id="prix">' + data.price + '</th><th><a href="#" onclick=Delete(this);>Delete</a></th></tr>';
-    
-})}
+
+    })
+}
 //effacer les produits dont on ne veut pas
 function Delete(e) {
-    const items = JSON.parse(localStorage.getItem('items'))
-    const filtered = items.filter (item => item.color !== e.parentElement.parentElement.children[1].textContent)
-    localStorage.setItem('items', JSON.stringify(filtered))
+    let items = []
+    JSON.parse(localStorage.getItem('items')).map(data => {
+        if (data.name != e.parentElement.parentElement.children[0].textContent || data.color != e.parentElement.parentElement.children[1].textContent) {
+            items.push(data)
+        }
+    })
     window.location.reload()
-    
+    localStorage.setItem('items', JSON.stringify(items))
 }
 panierTable.innerHTML = tableData
 
@@ -41,10 +45,11 @@ if (JSON.parse(localStorage.getItem('items')) !== null) {
 
 // on crée le tableau de produit dont on aura besoin et on y met les data id qui vont être renvoyé au serveur
 let products = []
-if (JSON.parse(localStorage.getItem('items')) !== null){
-JSON.parse(localStorage.getItem('items')).map(data => {
-    products.push(data.id)
-})}
+if (JSON.parse(localStorage.getItem('items')) !== null) {
+    JSON.parse(localStorage.getItem('items')).map(data => {
+        products.push(data.id)
+    })
+}
 
 // on récupère les données du formulaire et les check 
 const form = document.getElementById('contact')
@@ -132,38 +137,43 @@ function checkEmail() {
         let errorEmail = document.getElementById('errorEmail')
         errorEmail.innerHTML = "le champs est requis"
         errorEmail.style.color = 'red'
+        return false
 
     } else if (mailFormat.test(email.value) === false) {
         let errorEmail = document.getElementById('errorEmail')
         errorEmail.innerHTML = "Le champs doit comporter un email valide"
         errorEmail.style.color = 'red'
+        return false
 
     } else {
         return true
     }
 }
 
+console.log(JSON.parse(localStorage.getItem('items')).length)
+
+form.addEventListener('submit', function (e) {
+
+    e.preventDefault()
+    let firstName = document.getElementById('firstName').value
+    let lastName = document.getElementById('lastName').value
+    let address = document.getElementById('address').value
+    let city = document.getElementById('city').value
+    let email = document.getElementById('email').value
 
 
-    form.addEventListener('submit', function (e) {
+    let firstNameOk = checkFirstName(firstName)
+    let lastNameOk = checkLastName(lastName)
+    let addressOk = checkAddress(address)
+    let cityOk = checkCity(city)
+    let emailOk = checkEmail(email)
 
-            e.preventDefault()
-            let firstName = document.getElementById('firstName').value
-            let lastName = document.getElementById('lastName').value
-            let address = document.getElementById('address').value
-            let city = document.getElementById('city').value
-            let email = document.getElementById('email').value
-    
-    
-            checkFirstName(firstName)
-            checkLastName(lastName)
-            checkAddress(address)
-            checkCity(city)
-            checkEmail(email)
-    
-            // on envoit les données avec une post request
-            if(JSON.parse(localStorage.getItem('items')) !== null && localStorage.length !== 1){
-                fetch("http://localhost:3000/api/teddies/order", {
+    if (firstNameOk && lastNameOk && addressOk && cityOk && emailOk) {
+
+
+        // on envoit les données avec une post request
+        if (JSON.parse(localStorage.getItem('items')) !== null && JSON.parse(localStorage.getItem('items')).length !== 0) {
+            fetch("http://localhost:3000/api/teddies/order", {
                     method: 'POST',
                     headers: {
                         "Content-type": "application/json"
@@ -180,30 +190,31 @@ function checkEmail() {
                     })
                 })
                 .then(function (response) {
-    
+
                     if (response.status != 201) {
                         window.alert('Veuillez vérifier les données que vous avez rentré')
                     } else {
                         return response.json()
-    
+
                     }
                 })
                 .then(function (data) {
                     // quand la réponse est récupérée on supprime le panier et 
                     // on ouvre la page confirmation.html en transmettant les données pour un url search param
-    
+
                     window.open(`confirmation.html?orderId=${data.orderId}&firstName=${firstName}&lastName=${lastName}&price=${sommePrix}`)
                     window.location.reload()
                     localStorage.clear()
                 })
-            }else{
+        } else {
 
-                window.alert('Attention votre panier est vide!')
-                localStorage.clear()
-            }
-            
-    
-        
+            window.alert('Attention votre panier est vide!')
+            localStorage.clear()
+        }
 
-    })
+    }
 
+
+
+
+})
